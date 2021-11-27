@@ -6,8 +6,6 @@ const {
   HTTP_PORT,
 } = process.env
 
-console.log(process.env.TEST)
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
