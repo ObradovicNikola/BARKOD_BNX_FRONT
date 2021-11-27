@@ -72,6 +72,7 @@
                     const tmp = frm.baseCurrency
                     frm.baseCurrency = frm.quoteCurrency
                     frm.quoteCurrency = tmp
+                    updateQuotes()
                   }
                 "
                 ><v-icon dark> fas fa-exchange-alt</v-icon></v-btn
