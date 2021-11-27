@@ -12,7 +12,7 @@
     </v-footer>
     <!-- <v-bottom-navigation v-model="value" :background-color="color"> -->
     <!-- hide-on-scroll -->
-    <v-bottom-navigation
+    <!-- <v-bottom-navigation
       :background-color="color"
       dark
       shift
@@ -38,7 +38,7 @@
         <span>Contact</span>
         <v-icon class="mx-auto">mdi-email</v-icon>
       </v-btn>
-    </v-bottom-navigation>
+    </v-bottom-navigation> -->
   </v-app>
 </template>
 

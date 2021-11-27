@@ -9,12 +9,12 @@
         </v-btn>
       </v-toolbar-items>
 
-      <v-app-bar-nav-icon
+      <!-- <v-app-bar-nav-icon
         class="d-md-none"
         @click="drawer = true"
-      ></v-app-bar-nav-icon>
+      ></v-app-bar-nav-icon> -->
     </v-toolbar>
-    <v-navigation-drawer v-model="drawer" app right absolute temporary>
+    <!-- <v-navigation-drawer v-model="drawer" app right absolute temporary>
       <v-list nav dense>
         <v-list-item-group
           v-model="group"
@@ -42,7 +42,7 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-    </v-navigation-drawer>
+    </v-navigation-drawer> -->
   </v-app-bar>
 </template>
 
@@ -56,16 +56,16 @@ const data = () => ({
       icon: 'home',
       link: '/',
     },
-    {
-      title: 'About',
-      icon: 'info',
-      link: '/about',
-    },
-    {
-      title: 'Contact',
-      icon: 'email',
-      link: '/contact',
-    },
+    // {
+    //   title: 'About',
+    //   icon: 'info',
+    //   link: '/about',
+    // },
+    // {
+    //   title: 'Contact',
+    //   icon: 'email',
+    //   link: '/contact',
+    // },
   ],
 })
 
