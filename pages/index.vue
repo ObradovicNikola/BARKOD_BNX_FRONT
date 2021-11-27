@@ -15,41 +15,87 @@
           style="max-width: 800px; margin: auto"
           @submit.prevent="submit"
         >
-          <div class="d-flex justify-space-between">
-            <div class="flex-grow-1 d-flex flex-column justify-end">
+          <div class="main-flex-convertor d-flex justify-space-between">
+            <div class="flex-grow-1 d-flex flex-column justify-end mr-2">
               <span class="mb-0;">Količina:</span>
               <ValidationProvider
                 v-slot="{ errors }"
                 name="amount"
-                rules="required"
+                :rules="{
+                  required: true,
+                  regex: validNumberRegex,
+                }"
               >
                 <v-text-field
-                  v-model="frm.name"
+                  v-model="frm.amount"
                   :error-messages="errors"
                   label=""
+                  type="number"
                   required
+                  outlined
+                  dense
+                  hint="Up to 3 decimals"
                 ></v-text-field>
               </ValidationProvider>
             </div>
-            <div class="flex-grow-1 d-flex align-end"><span>from</span></div>
-            <v-btn style="background: #1b1824" dark class="mx-2" fab small
-              ><v-icon dark> mdi-minus </v-icon></v-btn
-            >
-            <div class="flex-grow-1 d-flex align-end"><span>to</span></div>
-          </div>
 
-          <ValidationProvider
-            v-slot="{ errors }"
-            name="email"
-            rules="required|email"
-          >
-            <v-text-field
-              v-model="frm.email"
-              :error-messages="errors"
-              label="E-mail"
-              required
-            ></v-text-field>
-          </ValidationProvider>
+            <div class="flex-grow-1 d-flex flex-column justify-end">
+              <span class="mb-0;">Konverzija iz:</span>
+              <ValidationProvider
+                v-slot="{ errors }"
+                name="selectBase"
+                rules="required"
+              >
+                <v-select
+                  v-model="frm.baseCurrency"
+                  :items="currencies"
+                  label=""
+                  outlined
+                  :error-messages="errors"
+                  dense
+                ></v-select>
+              </ValidationProvider>
+            </div>
+
+            <v-btn
+              style="background: #1b1824"
+              dark
+              class="mt-auto mx-2 mb-7"
+              fab
+              small
+              ><v-icon dark> fas fa-exchange-alt</v-icon></v-btn
+            >
+
+            <div class="flex-grow-1 d-flex flex-column justify-end">
+              <span class="mb-0;">Konverzija u:</span>
+              <ValidationProvider
+                v-slot="{ errors }"
+                name="selectQuote"
+                rules="required"
+              >
+                <v-select
+                  v-model="frm.quoteCurrency"
+                  :items="currencies"
+                  label=""
+                  outlined
+                  :error-messages="errors"
+                  dense
+                ></v-select>
+              </ValidationProvider>
+            </div>
+
+            <!-- <v-col
+        class="d-flex"
+        cols="12"
+        sm="6"
+      >
+        <v-select
+          :items="items"
+          label="Outlined style"
+          outlined
+        ></v-select>
+      </v-col> -->
+          </div>
 
           <div class="d-flex justify-end">
             <v-btn class="mr-4" @click="clear"> Clear </v-btn>
@@ -71,7 +117,7 @@ const components = { ValidationObserver, ValidationProvider }
 const frmDefaults = () => {
   return {
     amount: 0,
-    currency: '',
+    baseCurrency: '',
     quoteCurrency: '',
   }
 }
@@ -85,25 +131,20 @@ const data = () => ({
   frm: frmDefaults(),
   frmMeta: frmMetaDefaults(),
   buttonLoading: false,
+  currencies: ['RSD', 'USD', 'EUR', 'JPY'],
+  validNumberRegex: /^(\d+(\.\d{0,3})?)$/,
 })
 
 const methods = {
-  async submit() {
+  submit() {
     this.buttonLoading = true
     console.log('submit', this.frm)
 
     let res
     try {
-      const config = { headers: { 'Content-Type': 'multipart/form-data' } }
-      const fd = new FormData()
-
-      Object.keys(this.frm).map((key) => fd.append(key, this.frm[key]))
-
-      res = await this.$axios.$post(
-        `http://192.168.1.12:3000/projects/copyright-complaint`,
-        fd,
-        config
-      )
+      // res = await this.$axios.$post(
+      //   `http://192.168.1.12:3000/projects/copyright-complaint`
+      // )
     } catch (err) {
       this.frmMeta.error = err
       this.frmMeta.status = 'error'
@@ -153,6 +194,12 @@ export default { name, components, data, methods }
 }
 
 @media only screen and (max-width: 800px) {
+  .main-flex-convertor {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 800px) {
   .showcase .logo {
     font-size: 4rem !important;
   }
@@ -175,5 +222,15 @@ export default { name, components, data, methods }
   top: 80%; /* position the top  edge of the element at the middle of the parent */
   left: 50%; /* position the left edge of the element at the middle of the parent */
   transform: translate(-50%, 0%);
+}
+
+.v-input {
+  /* background: coral; */
+}
+
+.v-input.v-select {
+  /* background: red; */
+
+  width: 100%;
 }
 </style>

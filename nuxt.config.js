@@ -1,4 +1,4 @@
-import colors from 'vuetify/es5/util/colors'
+// import colors from 'vuetify/es5/util/colors'
 
 const {
   NODE_ENV,
@@ -40,7 +40,11 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~/assets/main.scss', '~/assets/custom-bulma.sass'],
+  css: [
+    '~/assets/main.scss',
+    '~/assets/custom-bulma.sass',
+    '@fortawesome/fontawesome-free/css/all.css',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{ src: '~/plugins/vee-validate.js', ssr: true }],
@@ -75,6 +79,9 @@ export default {
     // icons: {
     //   iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
     // },
+    icons: {
+      iconfont: 'fa',
+    },
     theme: {
       dark: false,
       // themes: {

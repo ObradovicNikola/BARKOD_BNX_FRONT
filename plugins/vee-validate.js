@@ -4,6 +4,7 @@ import {
   alpha_spaces,
   alpha_num,
   confirmed,
+  double,
   email,
   ext,
   length,
@@ -32,6 +33,11 @@ extend('confirmed', confirmed)
 extend('email', {
   ...email,
   message: 'This email is invalid',
+})
+
+extend('double', {
+  ...double,
+  message: 'Up to {decimal} decimal points'
 })
 
 extend('length', length)
