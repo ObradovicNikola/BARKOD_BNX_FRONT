@@ -2,10 +2,6 @@
   "name": "nuxt-vuetify",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "npm": ">=6.0.0",
-    "node": ">=10.0.0"
-  },
   "scripts": {
     "clean": "rm -rf .nuxt dist",
     "reset": "npm run clean && rm -rf node_modules",
