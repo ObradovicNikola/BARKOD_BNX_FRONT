@@ -1,7 +1,7 @@
 <template>
   <v-app color="red lighten-4">
     <app-header />
-    <v-main>
+    <v-main class="main-container px-10">
       <!-- style="max-width: 1200px" -->
       <!-- <v-container class=""> -->
       <Nuxt />
@@ -52,7 +52,13 @@ export default { name, data }
 </script>
 
 <style scoped>
-.v-main__wrap {
-  background: red;
+.main-container {
+  background: linear-gradient(to bottom, #1b1824 55%, white 50%);
+}
+
+@media only screen and (max-width: 800px) {
+  .main-container {
+    background: linear-gradient(to bottom, #1b1824 40%, white 30%);
+  }
 }
 </style>

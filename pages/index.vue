@@ -1,90 +1,90 @@
 <template>
-  <div class="showcase">
-    <h1 class="text-h1 logo">
+  <div class="showcase pb-10">
+    <h1 class="text-h1 logo text-center mt-16">
       <span id="barkod-logo" class="mr-4">barkod</span>exchange
     </h1>
 
-    <v-card class="kartica-converter py-3 px-3">
-      <ValidationObserver
-        v-slot="{ invalid }"
-        ref="observer"
-        style="max-width: 800px; margin: auto"
-      >
-        <form
-          class="mt-3"
+    <div class="kartica-converter mx-auto mt-16" style="margin-top: 128px !important">
+      <v-card class="py-3 px-3">
+        <ValidationObserver
+          v-slot="{ invalid }"
+          ref="observer"
           style="max-width: 800px; margin: auto"
-          @submit.prevent="submit"
         >
-          <div class="main-flex-convertor d-flex justify-space-between">
-            <div class="flex-grow-1 d-flex flex-column justify-end mr-2">
-              <span class="mb-0;">Količina:</span>
-              <ValidationProvider
-                v-slot="{ errors }"
-                name="amount"
-                :rules="{
-                  required: true,
-                  regex: validNumberRegex,
-                }"
+          <form
+            class="mt-3"
+            style="max-width: 800px; margin: auto"
+            @submit.prevent="submit"
+          >
+            <div class="main-flex-convertor d-flex justify-space-between">
+              <div class="flex-grow-1 d-flex flex-column justify-end mr-2">
+                <span class="mb-0;">Količina:</span>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  name="amount"
+                  :rules="{
+                    required: true,
+                    regex: validNumberRegex,
+                  }"
+                >
+                  <v-text-field
+                    v-model="frm.amount"
+                    :error-messages="errors"
+                    label=""
+                    required
+                    outlined
+                    dense
+                    hint="Up to 3 decimals"
+                  ></v-text-field>
+                </ValidationProvider>
+              </div>
+
+              <div class="flex-grow-1 d-flex flex-column justify-end">
+                <span class="mb-0;">Konverzija iz:</span>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  name="selectBase"
+                  rules="required"
+                >
+                  <v-select
+                    v-model="frm.baseCurrency"
+                    :items="currencies"
+                    label=""
+                    outlined
+                    :error-messages="errors"
+                    dense
+                  ></v-select>
+                </ValidationProvider>
+              </div>
+
+              <v-btn
+                style="background: #1b1824"
+                dark
+                class="mt-auto mx-2 mb-7"
+                fab
+                small
+                ><v-icon dark> fas fa-exchange-alt</v-icon></v-btn
               >
-                <v-text-field
-                  v-model="frm.amount"
-                  :error-messages="errors"
-                  label=""
-                  type="number"
-                  required
-                  outlined
-                  dense
-                  hint="Up to 3 decimals"
-                ></v-text-field>
-              </ValidationProvider>
-            </div>
 
-            <div class="flex-grow-1 d-flex flex-column justify-end">
-              <span class="mb-0;">Konverzija iz:</span>
-              <ValidationProvider
-                v-slot="{ errors }"
-                name="selectBase"
-                rules="required"
-              >
-                <v-select
-                  v-model="frm.baseCurrency"
-                  :items="currencies"
-                  label=""
-                  outlined
-                  :error-messages="errors"
-                  dense
-                ></v-select>
-              </ValidationProvider>
-            </div>
+              <div class="flex-grow-1 d-flex flex-column justify-end">
+                <span class="mb-0;">Konverzija u:</span>
+                <ValidationProvider
+                  v-slot="{ errors }"
+                  name="selectQuote"
+                  rules="required"
+                >
+                  <v-select
+                    v-model="frm.quoteCurrency"
+                    :items="currencies"
+                    label=""
+                    outlined
+                    :error-messages="errors"
+                    dense
+                  ></v-select>
+                </ValidationProvider>
+              </div>
 
-            <v-btn
-              style="background: #1b1824"
-              dark
-              class="mt-auto mx-2 mb-7"
-              fab
-              small
-              ><v-icon dark> fas fa-exchange-alt</v-icon></v-btn
-            >
-
-            <div class="flex-grow-1 d-flex flex-column justify-end">
-              <span class="mb-0;">Konverzija u:</span>
-              <ValidationProvider
-                v-slot="{ errors }"
-                name="selectQuote"
-                rules="required"
-              >
-                <v-select
-                  v-model="frm.quoteCurrency"
-                  :items="currencies"
-                  label=""
-                  outlined
-                  :error-messages="errors"
-                  dense
-                ></v-select>
-              </ValidationProvider>
-            </div>
-
-            <!-- <v-col
+              <!-- <v-col
         class="d-flex"
         cols="12"
         sm="6"
@@ -95,17 +95,27 @@
           outlined
         ></v-select>
       </v-col> -->
-          </div>
+            </div>
 
-          <div class="d-flex justify-end">
-            <v-btn class="mr-4" @click="clear"> Clear </v-btn>
-            <v-btn type="submit" :disabled="invalid" :loading="buttonLoading">
-              Submit
-            </v-btn>
-          </div>
-        </form>
-      </ValidationObserver>
-    </v-card>
+            <div class="d-flex justify-end">
+              <v-btn class="mr-4" @click="clear"> Clear </v-btn>
+              <v-btn type="submit" :disabled="invalid" :loading="buttonLoading">
+                Submit
+              </v-btn>
+            </div>
+          </form>
+        </ValidationObserver>
+      </v-card>
+      <v-card
+        class="mt-12 d-flex flex-column mx-auto pa-4"
+        style="max-width: 400px"
+      >
+        <p>Trenutne kvote:</p>
+        <v-chip label outlined>USD - RSD</v-chip>
+        <v-chip label outlined>USD - RSD</v-chip>
+        <v-chip label outlined>USD - RSD</v-chip>
+      </v-card>
+    </div>
     <div class="converter"></div>
   </div>
 </template>
@@ -136,15 +146,16 @@ const data = () => ({
 })
 
 const methods = {
-  submit() {
+  async submit() {
     this.buttonLoading = true
     console.log('submit', this.frm)
 
     let res
     try {
-      // res = await this.$axios.$post(
-      //   `http://192.168.1.12:3000/projects/copyright-complaint`
-      // )
+      res = await this.$axios.$post(
+        `https://obscure-cliffs-09563.herokuapp.com/convert?from=${this.frm.baseCurrency}&to=${this.frm.quoteCurrency}&amount=${this.frm.amount}`
+      )
+      console.log(res)
     } catch (err) {
       this.frmMeta.error = err
       this.frmMeta.status = 'error'
@@ -180,17 +191,12 @@ export default { name, components, data, methods }
 }
 
 .showcase {
-  height: 50vh;
-  background: #1b1824;
-  color: #fff;
-  position: relative;
-}
+  /* background: rgba(111, 111, 111, 0.8); */
 
-.showcase .logo {
-  position: absolute;
-  top: 40%; /* position the top  edge of the element at the middle of the parent */
-  left: 50%; /* position the left edge of the element at the middle of the parent */
-  transform: translate(-50%, -50%);
+  /* background: #1b1824; */
+  color: #fff;
+
+  /* position: relative; */
 }
 
 @media only screen and (max-width: 800px) {
@@ -218,10 +224,6 @@ export default { name, components, data, methods }
 .kartica-converter {
   /* min-width: 600px; */
   width: 80%;
-  position: absolute;
-  top: 80%; /* position the top  edge of the element at the middle of the parent */
-  left: 50%; /* position the left edge of the element at the middle of the parent */
-  transform: translate(-50%, 0%);
 }
 
 .v-input {
