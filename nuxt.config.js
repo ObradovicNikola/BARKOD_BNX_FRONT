@@ -7,7 +7,7 @@ const {
 } = process.env
 
 export default {
-  mode: 'spa',
+  ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - nuxt-vuetify',
