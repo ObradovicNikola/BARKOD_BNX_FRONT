@@ -82,6 +82,7 @@ export default {
     icons: {
       iconfont: 'fa',
     },
+
     theme: {
       dark: false,
       // themes: {
