@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar app flat height="">
+  <v-app-bar app flat dark height="">
     <v-toolbar flat>
-      <v-toolbar-title>Logo AppTitle</v-toolbar-title>
+      <v-toolbar-title>BARKOD EXCHANGE</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="d-none d-md-flex">
         <v-btn v-for="item in menuItems" :key="item.icon" :to="item.link" text

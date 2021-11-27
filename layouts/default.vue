@@ -2,9 +2,10 @@
   <v-app color="red lighten-4">
     <app-header />
     <v-main>
-      <v-container class="my-5" style="max-width: 1200px">
-        <Nuxt />
-      </v-container>
+      <!-- style="max-width: 1200px" -->
+      <!-- <v-container class=""> -->
+      <Nuxt />
+      <!-- </v-container> -->
     </v-main>
     <v-footer app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
@@ -49,3 +50,9 @@ const data = () => ({
 
 export default { name, data }
 </script>
+
+<style scoped>
+.v-main__wrap {
+  background: red;
+}
+</style>
