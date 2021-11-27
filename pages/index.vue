@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Home page</h1>
+    <h1>Home pagefff</h1>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod
       bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra
