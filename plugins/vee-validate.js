@@ -37,10 +37,18 @@ extend('email', {
 
 extend('double', {
   ...double,
-  message: 'Up to {decimal} decimal points'
+  message: 'Up to {decimal} decimal points',
 })
 
 extend('length', length)
+
+extend('nonzero', {
+  validate(value) {
+    if (value > 0) return true
+    else return false
+  },
+  message: 'Amount must be greater then zero',
+})
 
 extend('max', {
   ...max,

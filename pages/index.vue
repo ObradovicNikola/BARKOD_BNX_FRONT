@@ -28,6 +28,7 @@
                   :rules="{
                     required: true,
                     regex: validNumberRegex,
+                    nonzero: true,
                   }"
                 >
                   <v-text-field
@@ -63,7 +64,7 @@
               <v-btn
                 style="background: #1b1824"
                 dark
-                class="mt-auto mx-2 mb-7"
+                class="switch-button mt-auto mx-2 mb-7"
                 fab
                 small
                 @click="
@@ -90,28 +91,17 @@
                     outlined
                     :error-messages="errors"
                     dense
+                    @change="updateQuotes"
                   ></v-select>
                 </ValidationProvider>
               </div>
-
-              <!-- <v-col
-        class="d-flex"
-        cols="12"
-        sm="6"
-      >
-        <v-select
-          :items="items"
-          label="Outlined style"
-          outlined
-        ></v-select>
-      </v-col> -->
             </div>
 
-            <div class="d-flex align-end">
-              <div v-if="from && to">
+            <div class="d-flex align-end conversion-info">
+              <div v-if="from && to" class="mx-auto">
                 <span>{{ amount }} {{ currencyName[from] }} =</span>
                 <br />
-                <span class="text-h2"
+                <span class="text-h4"
                   >{{ quote }} {{ currencyNamePlural[to] }}</span
                 >
               </div>
@@ -128,10 +118,23 @@
         class="mt-12 d-flex flex-column mx-auto pa-4"
         style="max-width: 400px"
       >
-        <p>Trenutne kvote:</p>
-        <v-chip label outlined>USD - RSD</v-chip>
-        <v-chip label outlined>USD - RSD</v-chip>
-        <v-chip label outlined>USD - RSD</v-chip>
+        <p class="mb-2">Trenutne kvote:</p>
+        <v-chip
+          v-for="quote in quotesToShow"
+          :key="quote.id"
+          label
+          outlined
+          class="mt-3 d-flex justify-center"
+        >
+          <div class="d-flex justify-space-between">
+            <span>1 {{ quote.baseCurrency }}</span>
+            <span class="mx-2">=</span>
+            <span>{{ Math.round(quotesAll[quote.pair] * 1000) / 1000 }} </span>
+            <span class="ml-2">{{ quote.quoteCurrency }}</span>
+          </div>
+        </v-chip>
+        <!-- <v-chip label outlined>USD - RSD</v-chip>
+        <v-chip label outlined>USD - RSD</v-chip> -->
       </v-card>
     </div>
     <div class="converter"></div>
@@ -144,7 +147,7 @@ const name = 'ConverterPage'
 const components = { ValidationObserver, ValidationProvider }
 const frmDefaults = () => {
   return {
-    amount: 0,
+    amount: 1,
     baseCurrency: '',
     quoteCurrency: '',
   }
@@ -154,6 +157,14 @@ const frmMetaDefaults = () => ({
   error: null,
   status: null,
 })
+
+const asyncData = async function ({ $axios }) {
+  const quotesAll = await $axios.$get(
+    'https://obscure-cliffs-09563.herokuapp.com/quotes'
+  )
+  console.log(quotesAll)
+  return { quotesAll }
+}
 
 const data = () => ({
   frm: frmDefaults(),
@@ -180,9 +191,29 @@ const data = () => ({
   quote: 0,
   from: '',
   to: '',
+
+  quotesToShow: [],
 })
 
 const methods = {
+  updateQuotes() {
+    this.quotesToShow = []
+    let i = 0
+    this.currencies.forEach((currency) => {
+      if (currency !== this.frm.quoteCurrency) {
+        this.quotesToShow.push({
+          id: i,
+          baseCurrency: currency,
+          quoteCurrency: this.frm.quoteCurrency,
+          pair: currency + this.frm.quoteCurrency,
+        })
+        i++
+      }
+    })
+
+    console.log(this.quotesToShow)
+  },
+
   async submit() {
     this.buttonLoading = true
     console.log('submit', this.frm)
@@ -225,7 +256,7 @@ const methods = {
   },
 }
 
-export default { name, components, data, methods }
+export default { name, components, asyncData, data, methods }
 </script>
 
 <style scoped>
@@ -246,9 +277,20 @@ export default { name, components, data, methods }
   .main-flex-convertor {
     flex-direction: column;
   }
-}
 
-@media only screen and (max-width: 800px) {
+  .switch-button {
+    margin-left: auto !important;
+  }
+
+  .conversion-info {
+    flex-direction: column;
+  }
+  .conversion-info button {
+    width: 100% !important;
+    margin: auto !important;
+    margin-top: 1rem !important;
+  }
+
   .showcase .logo {
     font-size: 4rem !important;
   }
