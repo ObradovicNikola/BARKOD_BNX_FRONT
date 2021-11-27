@@ -109,7 +109,7 @@
               <v-spacer></v-spacer>
               <v-btn class="mr-4" @click="clear">Obriši</v-btn>
               <v-btn type="submit" :disabled="invalid" :loading="buttonLoading">
-                Izvrši konverziju
+                Konvertuj
               </v-btn>
             </div>
           </form>
@@ -119,7 +119,36 @@
         class="mt-12 d-flex flex-column mx-auto pa-4"
         style="max-width: 400px"
       >
+        <!-- <div class="d-flex"> -->
         <p class="mb-2">Trenutne kvote:</p>
+        <v-menu
+          v-model="fromDateMenu"
+          :close-on-content-click="true"
+          :nudge-right="40"
+          transition="scale-transition"
+          offset-y
+          min-width="auto"
+        >
+          <template #activator="{ on, attrs }">
+            <!-- TODOO print formattted date here -->
+            <!-- v-model="fromDateDisp" -->
+            <v-text-field
+              :value="fromDateDisp"
+              label="Izaberite datum"
+              prepend-icon="mdi-calendar"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="fromDateVal"
+            :max="new Date().toISOString().slice(0, 10)"
+            @input="fromDateMenu = false"
+            @change="getNewQuotes()"
+          ></v-date-picker>
+        </v-menu>
+        <!-- </div> -->
         <v-chip
           v-for="quote in quotesToShow"
           :key="quote.id"
@@ -134,6 +163,7 @@
             <span class="ml-2">{{ quote.quoteCurrency }}</span>
           </div>
         </v-chip>
+        <div v-if="quotesToShow.length === 0">Molimo, izaberite valutu.</div>
         <!-- <v-chip label outlined>USD - RSD</v-chip>
         <v-chip label outlined>USD - RSD</v-chip> -->
       </v-card>
@@ -174,6 +204,10 @@ const data = () => ({
   currencies: ['RSD', 'USD', 'EUR', 'JPY'],
   validNumberRegex: /^(\d+(\.\d{0,3})?)$/,
 
+  fromDateMenu: false,
+  fromDateVal: new Date().toISOString().slice(0, 10),
+  minDate: '2020-01-05',
+
   currencyName: {
     USD: 'Američki Dolar',
     EUR: 'Evro',
@@ -196,6 +230,13 @@ const data = () => ({
   quotesToShow: [],
 })
 
+const computed = {
+  fromDateDisp() {
+    return this.fromDateVal
+    // format/do something with date
+  },
+}
+
 const methods = {
   updateQuotes() {
     this.quotesToShow = []
@@ -213,6 +254,22 @@ const methods = {
     })
 
     console.log(this.quotesToShow)
+  },
+
+  async getNewQuotes() {
+    console.log(this.fromDateVal)
+    const timestamp = new Date(this.fromDateVal)
+    const unixTimestamp = timestamp.getTime()
+    console.log(unixTimestamp)
+
+    try {
+      const quotesAll = await this.$axios.$get(
+        `https://obscure-cliffs-09563.herokuapp.com/quotes?date=${unixTimestamp}`
+      )
+      this.quotesAll = quotesAll
+    } catch (err) {
+      console.log(err)
+    }
   },
 
   async submit() {
@@ -257,7 +314,7 @@ const methods = {
   },
 }
 
-export default { name, components, asyncData, data, methods }
+export default { name, components, asyncData, data, computed, methods }
 </script>
 
 <style scoped>
