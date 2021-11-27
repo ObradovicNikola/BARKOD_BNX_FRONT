@@ -1,11 +1,14 @@
 <template>
   <div class="showcase pb-10">
-    <h1 class="text-h1 logo text-center mt-16">
+    <h1 class="text-h1 logo text-center mt-16 font-italic">
       <span id="barkod-logo" class="mr-4">barkod</span>exchange
     </h1>
 
-    <div class="kartica-converter mx-auto mt-16" style="margin-top: 128px !important">
-      <v-card class="py-3 px-3">
+    <div
+      class="kartica-converter mx-auto mt-16"
+      style="margin-top: 128px !important"
+    >
+      <v-card class="py-6 px-3">
         <ValidationObserver
           v-slot="{ invalid }"
           ref="observer"
@@ -63,6 +66,13 @@
                 class="mt-auto mx-2 mb-7"
                 fab
                 small
+                @click="
+                  () => {
+                    const tmp = frm.baseCurrency
+                    frm.baseCurrency = frm.quoteCurrency
+                    frm.quoteCurrency = tmp
+                  }
+                "
                 ><v-icon dark> fas fa-exchange-alt</v-icon></v-btn
               >
 
@@ -97,10 +107,18 @@
       </v-col> -->
             </div>
 
-            <div class="d-flex justify-end">
-              <v-btn class="mr-4" @click="clear"> Clear </v-btn>
+            <div class="d-flex align-end">
+              <div v-if="from && to">
+                <span>{{ amount }} {{ currencyName[from] }} =</span>
+                <br />
+                <span class="text-h2"
+                  >{{ quote }} {{ currencyNamePlural[to] }}</span
+                >
+              </div>
+              <v-spacer></v-spacer>
+              <v-btn class="mr-4" @click="clear">Obriši</v-btn>
               <v-btn type="submit" :disabled="invalid" :loading="buttonLoading">
-                Submit
+                Izvrši konverziju
               </v-btn>
             </div>
           </form>
@@ -143,6 +161,25 @@ const data = () => ({
   buttonLoading: false,
   currencies: ['RSD', 'USD', 'EUR', 'JPY'],
   validNumberRegex: /^(\d+(\.\d{0,3})?)$/,
+
+  currencyName: {
+    USD: 'Američki Dolar',
+    EUR: 'Evro',
+    RSD: 'Srpski dinar',
+    JPY: 'Japanski jen',
+  },
+
+  currencyNamePlural: {
+    USD: 'Američkih Dolar',
+    EUR: 'Evra',
+    RSD: 'Srpskih dinara',
+    JPY: 'Japanskog jena',
+  },
+
+  amount: 0,
+  quote: 0,
+  from: '',
+  to: '',
 })
 
 const methods = {
@@ -152,16 +189,22 @@ const methods = {
 
     let res
     try {
-      res = await this.$axios.$post(
+      res = await this.$axios.$get(
         `https://obscure-cliffs-09563.herokuapp.com/convert?from=${this.frm.baseCurrency}&to=${this.frm.quoteCurrency}&amount=${this.frm.amount}`
       )
       console.log(res)
+      this.quote = res.result
+      this.from = this.frm.baseCurrency
+      this.to = this.frm.quoteCurrency
+      this.amount = this.frm.amount
     } catch (err) {
       this.frmMeta.error = err
       this.frmMeta.status = 'error'
       console.log('ERROR', err)
+      this.buttonLoading = false
       return
     }
+
     this.response = res
     console.log(res)
 
@@ -186,8 +229,8 @@ export default { name, components, data, methods }
 </script>
 
 <style scoped>
-.v-main {
-  background: red;
+#barkod-logo {
+  font-family: 'prometheangradital', sans-serif !important;
 }
 
 .showcase {

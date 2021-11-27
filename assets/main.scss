@@ -1,3 +1,9 @@
 html {
   // overflow-y: auto !important;
 }
+
+@font-face {
+  font-family: 'prometheangradital';
+  src: local('prometheangradital'),
+    url(/prometheangradital.ttf) format('truetype');
+}
