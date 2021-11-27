@@ -39,7 +39,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['~/assets/main.scss'],
+  css: ['~/assets/main.scss', '~/assets/custom-bulma.sass'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [{ src: '~/plugins/vee-validate.js', ssr: true }],
@@ -69,7 +69,7 @@ export default {
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
-    customVariables: ['~/assets/variables.scss', '~/assets/custom-bulma.sass'],
+    customVariables: ['~/assets/variables.scss'],
     // to do: add svg icons to vuetify in nuxt
     // icons: {
     //   iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
